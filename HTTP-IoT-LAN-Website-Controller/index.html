@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fish Click</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      min-height: 100%;
+      transition: background-color 0.4s ease;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1a5f7a;
+    }
+
+    .fish-container {
+      cursor: pointer;
+      animation: rotate 8s linear infinite;
+    }
+
+    .fish-container:hover {
+      filter: brightness(1.1);
+    }
+
+    .fish-container:active {
+      transform: scale(0.98);
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .fish-svg {
+      width: 200px;
+      height: 120px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="fish-container" id="fishContainer" title="Click for a new background color!">
+    <svg class="fish-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <!-- Fish body -->
+      <ellipse cx="100" cy="60" rx="55" ry="28" fill="#ff9f43" stroke="#e67e22" stroke-width="2"/>
+      <!-- Tail -->
+      <path d="M 155 60 L 195 35 L 195 85 Z" fill="#ff9f43" stroke="#e67e22" stroke-width="2"/>
+      <!-- Eye -->
+      <circle cx="135" cy="52" r="10" fill="#fff"/>
+      <circle cx="138" cy="50" r="5" fill="#2c3e50"/>
+      <!-- Fin -->
+      <path d="M 70 35 Q 85 25 95 35 Q 85 45 70 35" fill="#e67e22" opacity="0.9"/>
+      <path d="M 75 85 Q 90 95 100 85 Q 90 75 75 85" fill="#e67e22" opacity="0.9"/>
+      <!-- Scales hint -->
+      <path d="M 60 55 Q 70 50 75 58 M 50 58 Q 60 53 65 61 M 40 61 Q 50 56 55 64" stroke="#e67e22" stroke-width="1" fill="none" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <script>
+    const body = document.body;
+    const fishContainer = document.getElementById('fishContainer');
+
+    // Unity server = same host as this page, port 8080 (works for localhost and when opened via LAN IP, e.g. http://192.168.1.50:8000)
+    const UNITY_SERVER = location.protocol + '//' + location.hostname + ':8080';
+
+    function randomColor() {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return { css: `rgb(${r}, ${g}, ${b})`, r, g, b };
+    }
+
+    fishContainer.addEventListener('click', function () {
+      const { css, r, g, b } = randomColor();
+      body.style.backgroundColor = css;
+      // Tell Unity to set the cube color to match the background
+      fetch(`${UNITY_SERVER}/command?color=${r},${g},${b}`).catch(function () {});
+    });
+  </script>
+</body>
+</html>
