@@ -19,24 +19,35 @@ public class ReadWriteCharsUDP : MonoBehaviour
     public GameObject cube; 
 
     void Awake() {
-        receiver.onDataReceived += ReadUDP; 
+        receiver.onDataReceived += ReadUDP;
+        CollectibleItem.OnItemCollected += OnCollectibleCollected;
+    }
+
+    void OnDestroy() {
+        CollectibleItem.OnItemCollected -= OnCollectibleCollected;
+    }
+
+    void OnCollectibleCollected(string itemName) {
+        if (itemName.StartsWith("Chicken_plate")) {
+            SendCharacter('s');
+        }
     }
 
     void Update() {
         // Change cube color based on received serial character 'a' or 'b':
-        if (receivedString == "a") {
-            cube.GetComponent<Renderer>().material.color = Color.red;
-        } else if (receivedString == "b") {
-            cube.GetComponent<Renderer>().material.color = Color.blue;
-        }
+    //     if (receivedString == "a") {
+    //         cube.GetComponent<Renderer>().material.color = Color.red;
+    //     } else if (receivedString == "b") {
+    //         cube.GetComponent<Renderer>().material.color = Color.blue;
+    //     }
 
-        // Send characters 'c' and 'd' if respective keys are pressed:
-        if (Input.GetKeyDown(KeyCode.C)) {
-            SendCharacter('c');
-        }
-        if (Input.GetKeyDown(KeyCode.D)) {
-            SendCharacter('d');
-        }
+    //     // Send characters 'c' and 'd' if respective keys are pressed:
+    //     if (Input.GetKeyDown(KeyCode.C)) {
+    //         SendCharacter('c');
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.D)) {
+    //         SendCharacter('d');
+    //     }
     }
 
     void SendCharacter(char sentChar) {
@@ -46,6 +57,6 @@ public class ReadWriteCharsUDP : MonoBehaviour
 
     private void ReadUDP(string s) { //Runs on an infinite loop in another thread. Do not call manually elsewhere!
         receivedString = s;
-        Debug.Log("Received character: " + receivedString);
+        Debug.Log("Received: " + receivedString);
     }
 }

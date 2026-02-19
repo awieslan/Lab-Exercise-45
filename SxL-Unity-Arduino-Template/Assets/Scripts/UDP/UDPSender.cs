@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Sockets;
 using System.Threading;
@@ -10,7 +10,8 @@ public class UDPSender : MonoBehaviour {
     private string senderMessage = null;
    
     [Header("Address")]
-    public string IP = "127.0.0.1";
+    [Tooltip("Arduino's IP address - must match Arduino's WiFi.localIP()")]
+    public string IP = "172.168.10.4";
     public int senderPort;
 
     [Header("Init settings")]

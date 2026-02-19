@@ -44,10 +44,14 @@ public class CollectibleItem : MonoBehaviour
         transform.Rotate(rotationAxis, rotationSpeed * Time.deltaTime);
     }
 
+    /// <summary>Fired when this collectible is collected by the coin. Passes the GameObject name (e.g. "Chicken_plate").</summary>
+    public static event System.Action<string> OnItemCollected;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponentInParent<CoinController>() != null)
         {
+            OnItemCollected?.Invoke(gameObject.name);
             Destroy(gameObject);
         }
     }

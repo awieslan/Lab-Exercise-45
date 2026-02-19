@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05eedd54eadd0f4f94c98f313badfcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IP: 192.168.0.067
+  IP: 172.168.10.4
   senderPort: 5005
   autoStart: 1
   bufferSize: 32768
