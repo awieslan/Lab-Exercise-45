@@ -1,0 +1,6 @@
+{
+  "name": "HTTP-Smart-Controller-XR",
+  "version": "1.0.0",
+  "description": "WebXR controller for Fish Click - same functionality as HTTP-IoT-LAN-Website-Controller, using XR controllers",
+  "private": true
+}
