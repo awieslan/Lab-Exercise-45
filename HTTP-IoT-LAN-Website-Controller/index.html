@@ -241,20 +241,20 @@
       }
 
       function onPointerDown(e) {
-        e.preventDefault();
+        if (typeof e.preventDefault === 'function') e.preventDefault();
         joystickBase.classList.add('dragging');
         setStickPosition(e.clientX, e.clientY);
       }
 
       function onPointerMove(e) {
         if (!joystickBase.classList.contains('dragging')) return;
-        e.preventDefault();
+        if (typeof e.preventDefault === 'function') e.preventDefault();
         setStickPosition(e.clientX, e.clientY);
       }
 
       function onPointerUp(e) {
         if (!joystickBase.classList.contains('dragging')) return;
-        e.preventDefault();
+        if (typeof e.preventDefault === 'function') e.preventDefault();
         joystickBase.classList.remove('dragging');
         centerStick();
       }
@@ -263,10 +263,21 @@
       window.addEventListener('mousemove', onPointerMove);
       window.addEventListener('mouseup', onPointerUp);
 
-      joystickBase.addEventListener('touchstart', function (e) { onPointerDown(e.touches[0]); }, { passive: false });
-      window.addEventListener('touchmove', function (e) { if (e.touches.length) onPointerMove(e.touches[0]); }, { passive: false });
-      window.addEventListener('touchend', function (e) { if (e.touches.length === 0) onPointerUp(e); });
-      window.addEventListener('touchcancel', function (e) { if (e.touches.length === 0) onPointerUp(e); });
+      joystickBase.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        onPointerDown(e.touches[0]);
+      }, { passive: false });
+      window.addEventListener('touchmove', function (e) {
+        if (!joystickBase.classList.contains('dragging')) return;
+        e.preventDefault();
+        if (e.touches.length) onPointerMove(e.touches[0]);
+      }, { passive: false });
+      window.addEventListener('touchend', function (e) {
+        if (e.touches.length === 0) onPointerUp(e);
+      }, { passive: false });
+      window.addEventListener('touchcancel', function (e) {
+        if (e.touches.length === 0) onPointerUp(e);
+      }, { passive: false });
     })();
   </script>
 </body>
